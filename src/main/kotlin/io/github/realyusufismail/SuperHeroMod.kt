@@ -32,10 +32,11 @@ class SuperHeroMod {
     init {
         val modEventBus = FMLJavaModLoadingContext.get().modEventBus
 
-        // Register the commonSetup method for modloading
-        modEventBus.addListener { event: FMLCommonSetupEvent? ->
-            MainEventBusSubscriber(event!!).reg()
+        // Register the commonSetup method for mod loading
+        modEventBus.addListener { event: FMLCommonSetupEvent ->
+            MainEventBusSubscriber(event).reg()
         }
+
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this)
     }

@@ -18,8 +18,11 @@
  */ 
 package io.github.realyusufismail.eventbus
 
+import io.github.realyusufismail.core.init.ItemInit
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 
-class MainEventBusSubscriber(event: FMLCommonSetupEvent) {
-    fun reg() {}
+class MainEventBusSubscriber(val event: FMLCommonSetupEvent) {
+    fun reg() {
+        ItemInit.items.register(event)
+    }
 }
