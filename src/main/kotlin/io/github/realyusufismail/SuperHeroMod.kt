@@ -18,10 +18,28 @@
  */ 
 package io.github.realyusufismail
 
+import com.mojang.logging.LogUtils
+import io.github.realyusufismail.eventbus.MainEventBusSubscriber
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 
 @Mod(SuperHeroMod.MOD_ID)
 class SuperHeroMod {
+    private val logger = LogUtils.getLogger()
+
+    init {
+        val modEventBus = FMLJavaModLoadingContext.get().modEventBus
+
+        // Register the commonSetup method for modloading
+        modEventBus.addListener { event: FMLCommonSetupEvent? ->
+            MainEventBusSubscriber(event!!).reg()
+        }
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this)
+    }
+
     companion object {
         const val MOD_ID = "superheromod"
     }

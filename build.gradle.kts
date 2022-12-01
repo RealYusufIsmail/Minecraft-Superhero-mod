@@ -82,13 +82,45 @@ configure<UserDevExtension> {
             // where to look for existing resources.
             // args(""--mod"", modId, ""--all"", ""--output"", file("src/generated/resources/"),
             // ""--existing"", file("src/main/resources/"))
+
+            args(
+                "--mod",
+                modId,
+                "--all",
+                "--output",
+                file("src/generated/resources/"),
+                "--existing",
+                file("src/main/resources/"))
         }
     }
 }
 
-repositories { mavenCentral() }
+sourceSets.main.configure { resources.srcDir("src/generated/resources") }
 
-dependencies { "minecraft"("net.minecraftforge:forge:${forgeVersion}") }
+repositories {
+    mavenCentral()
+    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+}
+
+dependencies {
+    // main
+    "minecraft"("net.minecraftforge:forge:${forgeVersion}")
+    // geckolib
+    implementation("software.bernie.geckolib:geckolib-forge-1.19:3.1.20")
+    // logger
+    api("ch.qos.logback:logback-classic:1.4.5")
+    api("ch.qos.logback:logback-core:1.4.5")
+    api("uk.org.lidalia:sysout-over-slf4j:1.0.2")
+    // core
+    api("io.github.realyusufismail:RealYusufIsmail-Core:1.19-1.0.3")
+    // test
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.7.21")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}
 
 // processResources
 val Project.minecraft: UserDevExtension
