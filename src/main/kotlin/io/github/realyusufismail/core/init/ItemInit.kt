@@ -25,7 +25,7 @@ import net.minecraft.world.item.SwordItem
 import net.minecraftforge.registries.RegistryObject
 
 object ItemInit {
-    val properties: Item.Properties = Item.Properties().tab(CreativeTabs.MARVEL.tab)
+    private val properties: Item.Properties = Item.Properties().tab(CreativeTabs.MARVEL.tab)
 
     // Marvel
     val mjolnir: RegistryObject<SwordItem> =

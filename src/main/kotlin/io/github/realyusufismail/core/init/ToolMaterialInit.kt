@@ -18,4 +18,40 @@
  */ 
 package io.github.realyusufismail.core.init
 
-class ToolMaterialInit {}
+import net.minecraft.world.item.Tier
+import net.minecraft.world.item.crafting.Ingredient
+
+enum class ToolMaterialInit(
+    private val harvestLevel: Int,
+    private val maxUses: Int,
+    private val efficiency: Float,
+    private val attackDamage: Float,
+    private val enchantValue: Int,
+    private val repairMaterial: Ingredient
+) : Tier {
+    MJOLNIR(3, 1561, 8.0f, 3.0f, 10, Ingredient.EMPTY); // TODO: Add repair material
+
+    override fun getUses(): Int {
+        return maxUses
+    }
+
+    override fun getSpeed(): Float {
+        return efficiency
+    }
+
+    override fun getAttackDamageBonus(): Float {
+        return attackDamage
+    }
+
+    override fun getLevel(): Int {
+        return harvestLevel
+    }
+
+    override fun getEnchantmentValue(): Int {
+        return enchantValue
+    }
+
+    override fun getRepairIngredient(): Ingredient {
+        return repairMaterial
+    }
+}
