@@ -18,12 +18,10 @@
  */ 
 package io.github.realyusufismail.eventbus
 
-import io.github.realyusufismail.core.init.ItemInit
 import net.minecraftforge.eventbus.api.IEventBus
 
 class MainEventBusSubscriber(private val event: IEventBus) {
     fun reg() {
-        ItemInit.items.register(event)
         ForgeReg.reg(event)
     }
 }
