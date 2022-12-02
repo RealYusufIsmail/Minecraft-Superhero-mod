@@ -16,14 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.eventbus
+package io.github.realyusufismail.core.creativetab
 
+import io.github.realyusufismail.SuperHeroMod
 import io.github.realyusufismail.core.init.ItemInit
-import net.minecraftforge.eventbus.api.IEventBus
+import java.util.function.Supplier
+import net.minecraft.world.item.CreativeModeTab
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraftforge.registries.RegistryObject
 
-class MainEventBusSubscriber(private val event: IEventBus) {
-    fun reg() {
-        ItemInit.items.register(event)
-        ForgeReg.reg(event)
-    }
+enum class CreativeTabs(val tab: CreativeModeTab) {
+    MARVEL(createTab("marvel", ItemInit::mjolnir))
 }
+
+private fun createTab(name: String, iconItem: Supplier<out RegistryObject<out Item>>) =
+    object : CreativeModeTab("${SuperHeroMod.MOD_ID}_$name") {
+        override fun makeIcon() = ItemStack(iconItem.get().get())
+    }

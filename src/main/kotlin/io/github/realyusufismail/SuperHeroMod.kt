@@ -21,9 +21,11 @@ package io.github.realyusufismail
 import com.mojang.logging.LogUtils
 import io.github.realyusufismail.eventbus.MainEventBusSubscriber
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+import software.bernie.example.GeckoLibMod
+import software.bernie.geckolib3.GeckoLib
 
 @Mod(SuperHeroMod.MOD_ID)
 class SuperHeroMod {
@@ -33,12 +35,13 @@ class SuperHeroMod {
         val modEventBus = FMLJavaModLoadingContext.get().modEventBus
 
         // Register the commonSetup method for mod loading
-        modEventBus.addListener { event: FMLCommonSetupEvent ->
-            MainEventBusSubscriber(event).reg()
-        }
+        modEventBus.addListener { event: IEventBus -> MainEventBusSubscriber(event).reg() }
 
+        GeckoLibMod.DISABLE_IN_DEV = false
+        GeckoLib.initialize()
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this)
+        logger.info("Hello from SuperHeroMod!")
     }
 
     companion object {

@@ -16,14 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.eventbus
+package io.github.realyusufismail.core.init
 
-import io.github.realyusufismail.core.init.ItemInit
-import net.minecraftforge.eventbus.api.IEventBus
-
-class MainEventBusSubscriber(private val event: IEventBus) {
-    fun reg() {
-        ItemInit.items.register(event)
-        ForgeReg.reg(event)
-    }
-}
+class ToolMaterialInit {}

@@ -18,12 +18,21 @@
  */ 
 package io.github.realyusufismail.eventbus
 
-import io.github.realyusufismail.core.init.ItemInit
+import io.github.realyusufismail.SuperHeroMod
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
 import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.registries.DeferredRegister
+import net.minecraftforge.registries.ForgeRegistries
 
-class MainEventBusSubscriber(private val event: IEventBus) {
-    fun reg() {
-        ItemInit.items.register(event)
-        ForgeReg.reg(event)
+object ForgeReg {
+    val items: DeferredRegister<Item> =
+        DeferredRegister.create(ForgeRegistries.ITEMS, SuperHeroMod.MOD_ID)
+    val blocks: DeferredRegister<Block> =
+        DeferredRegister.create(ForgeRegistries.BLOCKS, SuperHeroMod.MOD_ID)
+
+    fun reg(event: IEventBus) {
+        items.register(event)
+        blocks.register(event)
     }
 }

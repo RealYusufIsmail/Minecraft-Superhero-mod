@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.allopen") version "1.7.21"
     id("com.diffplug.spotless") version "6.11.0"
     id("net.minecraftforge.gradle") version "5.1.+"
+    id("org.parchmentmc.librarian.forgegradle") version "1.+"
     jacoco // code coverage reports
 }
 
@@ -24,7 +25,7 @@ group = modGroup
 println("Using Java ${JavaVersion.current()}")
 
 configure<UserDevExtension> {
-    mappings("official", "1.19.2")
+    mappings("parchment", "2022.11.27-1.19.2")
 
     runs {
         create("client") {
