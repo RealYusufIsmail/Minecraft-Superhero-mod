@@ -18,10 +18,36 @@
  */ 
 package io.github.realyusufismail.eventbus
 
-import net.minecraftforge.eventbus.api.IEventBus
+import io.github.realyusufismail.SuperHeroMod
+import io.github.realyusufismail.SuperHeroMod.Companion.logger
+import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
+import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+import net.minecraftforge.registries.DeferredRegister
+import net.minecraftforge.registries.ForgeRegistries
 
-class MainEventBusSubscriber(private val event: IEventBus) {
-    fun reg() {
-        ForgeReg.reg(event)
+@Mod.EventBusSubscriber(
+    modid = SuperHeroMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
+object MainEventBusSubscriber {
+    val ITEMS: DeferredRegister<Item> =
+        DeferredRegister.create(ForgeRegistries.ITEMS, SuperHeroMod.MOD_ID)
+    val BLOCKS: DeferredRegister<Block> =
+        DeferredRegister.create(ForgeRegistries.BLOCKS, SuperHeroMod.MOD_ID)
+
+    init {
+        val modEventBus = FMLJavaModLoadingContext.get().modEventBus
+
+        ITEMS.register(modEventBus)
+        BLOCKS.register(modEventBus)
+    }
+
+    @SubscribeEvent
+    @JvmStatic
+    fun commonSetup(event: FMLCommonSetupEvent) {
+        logger.info("Hello from SuperHeroMod!")
     }
 }

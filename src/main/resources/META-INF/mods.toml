@@ -20,3 +20,18 @@ A mod that gives you the ability to use superpowers!
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
+
+[[dependencies.superheromod]]
+modId = "minecraft"
+mandatory = true
+versionRange= "[1.19.2,1.20)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.superheromod]]
+modId = "geckolib3"
+mandatory = true
+versionRange = "1.19:3.1.11,)"
+ordering = "NONE"
+side = "BOTH"
+

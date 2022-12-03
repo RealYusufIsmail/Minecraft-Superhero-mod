@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Specification-Title: SuperHeroMod
+Implementation-Title: SuperHeroMod
+Specification-Vendor: Yusuf Arfan Ismail (RealYusufIsmail)
+Implementation-Vendor: Yusuf Arfan Ismail (RealYusufIsmail)

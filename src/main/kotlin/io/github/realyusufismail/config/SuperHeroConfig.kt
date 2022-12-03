@@ -16,19 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.core.init
+package io.github.realyusufismail.config
 
-import io.github.realyusufismail.core.creativetab.CreativeTabs
-import io.github.realyusufismail.eventbus.MainEventBusSubscriber.ITEMS
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.SwordItem
-import net.minecraftforge.registries.RegistryObject
+import net.minecraftforge.fml.ModContainer
 
-object ItemInit {
-    private val properties: Item.Properties = Item.Properties().tab(CreativeTabs.MARVEL.tab)
+object SuperHeroConfig {
+    private val general = GeneralConfig()
 
-    // Marvel
-
-    val mjolnir: RegistryObject<SwordItem> =
-        ITEMS.register("mjolnir") { SwordItem(ToolMaterialInit.MJOLNIR, 3, -2.4f, properties) }
+    fun registerConfigs(activeContainer: ModContainer) {
+        activeContainer.apply { addConfig(SuperHeroModConfig(this, general)) }
+    }
 }

@@ -16,19 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
-package io.github.realyusufismail.core.init
+package io.github.realyusufismail.config
 
-import io.github.realyusufismail.core.creativetab.CreativeTabs
-import io.github.realyusufismail.eventbus.MainEventBusSubscriber.ITEMS
-import net.minecraft.world.item.Item
-import net.minecraft.world.item.SwordItem
-import net.minecraftforge.registries.RegistryObject
+import net.minecraftforge.common.ForgeConfigSpec
+import net.minecraftforge.fml.config.ModConfig
 
-object ItemInit {
-    private val properties: Item.Properties = Item.Properties().tab(CreativeTabs.MARVEL.tab)
+class GeneralConfig : IConfig {
+    override val fileName: String = "general"
+    override val configSpec: ForgeConfigSpec
+    override val configType: ModConfig.Type = ModConfig.Type.SERVER
 
-    // Marvel
-
-    val mjolnir: RegistryObject<SwordItem> =
-        ITEMS.register("mjolnir") { SwordItem(ToolMaterialInit.MJOLNIR, 3, -2.4f, properties) }
+    init {
+        ForgeConfigSpec.Builder()
+            .apply {
+                push("general")
+                pop()
+            }
+            .build()
+            .also { configSpec = it }
+    }
 }

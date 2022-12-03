@@ -24,12 +24,23 @@ group = modGroup
 
 println("Using Java ${JavaVersion.current()}")
 
+sourceSets {
+    main {
+        resources {
+            include("**/**")
+            srcDirs("src/datagen/generated/resources")
+            exclude(".cache")
+        }
+    }
+}
+
 configure<UserDevExtension> {
     mappings("parchment", "2022.11.27-1.19.2")
 
     runs {
         create("client") {
             workingDirectory(project.file("run"))
+            accessTransformer(project.file("src/main/resources/META-INF/accesstransformer.cfg"))
 
             // Recommended logging data for a userdev environment
             // The markers can be added/remove as needed separated by commas.
@@ -107,13 +118,13 @@ dependencies {
     // main
     "minecraft"("net.minecraftforge:forge:${forgeVersion}")
     // geckolib
-    implementation("software.bernie.geckolib:geckolib-forge-1.19:3.1.20")
+    "api"(fg.deobf("software.bernie.geckolib:geckolib-forge-1.19:3.1.38"))
     // logger
-    api("ch.qos.logback:logback-classic:1.4.5")
-    api("ch.qos.logback:logback-core:1.4.5")
-    api("uk.org.lidalia:sysout-over-slf4j:1.0.2")
+    "api"("ch.qos.logback:logback-classic:1.4.5")
+    "api"("ch.qos.logback:logback-core:1.4.5")
+    "api"("uk.org.lidalia:sysout-over-slf4j:1.0.2")
     // core
-    api("io.github.realyusufismail:RealYusufIsmail-Core:1.19-1.0.3")
+    "api"("io.github.realyusufismail:RealYusufIsmail-Core:1.19-1.0.3")
     // test
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.7.21")
 }
@@ -122,28 +133,6 @@ tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
-
-// processResources
-val Project.minecraft: UserDevExtension
-    get() = extensions.getByName<UserDevExtension>("minecraft")
-
-tasks.withType<Jar> {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property("version", project.version)
-
-    baseName = modBaseName
-
-    // replace stuff in mcmod.info, nothing else
-    filesMatching("/mcmod.info") {
-        expand(
-            mapOf(
-                "version" to project.version,
-                "mcversion" to minecraft.mappingVersion,
-            ))
-    }
-}
-
-tasks.withType<KotlinCompile> { kotlinOptions.jvmTarget = "17" }
 
 tasks.jacocoTestReport {
     group = "Reporting"
@@ -204,5 +193,23 @@ java {
 tasks.javadoc {
     if (JavaVersion.current().isJava9Compatible) {
         (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
+}
+
+tasks.withType<Jar> {
+    archiveFileName.set("SuperHeroMod-${modVersion}-Forge-${forgeVersion}.jar")
+    manifest {
+        from(file("src/main/resources/META-INF/MANIFEST.MF"))
+        attributes["Implementation-Version"] = project.version
+    }
+    exclude("net")
+    //filesMatching("META-INF/mods.toml") { expand(project.properties) }
+    //filesMatching("mcmod.info") { expand(project.properties) }
+}
+
+kotlin {
+    target.compilations.configureEach {
+        kotlinOptions.jvmTarget = "17"
+        kotlinOptions.freeCompilerArgs += listOf("-Xno-param-assertions", "-Xno-call-assertions")
     }
 }
