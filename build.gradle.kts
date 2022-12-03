@@ -24,12 +24,27 @@ group = modGroup
 println("Using Java ${JavaVersion.current()}")
 
 sourceSets {
+    create("api") {
+        //empty list
+        val emptyList : List<String> = listOf()
+        resources.srcDirs(emptyList)
+    }
+
     main {
         resources {
             include("**/**")
             srcDirs("src/datagen/generated/resources")
             exclude(".cache")
         }
+        compileClasspath += getByName("api").output
+        runtimeClasspath += getByName("api").output
+    }
+
+    create("datagen") {
+        java.srcDir("src/datagen/main/java")
+        kotlin.srcDir("src/datagen/main/kotlin")
+        resources.srcDir("src/datagen/main/resources")
+        compileClasspath += getByName("api").output + main.get().output
     }
 }
 
@@ -56,6 +71,15 @@ configure<UserDevExtension> {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property("forge.enabledGameTestNamespaces", modId)
+
+            mods {
+                create(modId) {
+                    val sources : MutableList<SourceSet> = mutableListOf()
+                    sources.add(sourceSets.main.get())
+                    sources.add(sourceSets.getByName("api"))
+                    sources(sources)
+                }
+            }
         }
 
         create("server") {
@@ -66,6 +90,16 @@ configure<UserDevExtension> {
             property("forge.logging.console.level", "debug")
 
             property("forge.enabledGameTestNamespaces", modId)
+
+            mods {
+                create(modId) {
+                    val sources : MutableList<SourceSet> = mutableListOf()
+                    sources.add(sourceSets.main.get())
+                    sources.add(sourceSets.getByName("api"))
+                    sources.add(sourceSets.getByName("datagen"))
+                    sources(sources)
+                }
+            }
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -102,6 +136,16 @@ configure<UserDevExtension> {
                 file("src/generated/resources/"),
                 "--existing",
                 file("src/main/resources/"))
+
+            mods {
+                create(modId) {
+                    val sources : MutableList<SourceSet> = mutableListOf()
+                    sources.add(sourceSets.main.get())
+                    sources.add(sourceSets.getByName("api"))
+                    sources.add(sourceSets.getByName("datagen"))
+                    sources(sources)
+                }
+            }
         }
     }
 }
