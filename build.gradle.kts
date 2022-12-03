@@ -1,6 +1,5 @@
 import net.minecraftforge.gradle.userdev.UserDevExtension
 import org.gradle.jvm.tasks.Jar
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.21"
@@ -203,8 +202,8 @@ tasks.withType<Jar> {
         attributes["Implementation-Version"] = project.version
     }
     exclude("net")
-    //filesMatching("META-INF/mods.toml") { expand(project.properties) }
-    //filesMatching("mcmod.info") { expand(project.properties) }
+    // filesMatching("META-INF/mods.toml") { expand(project.properties) }
+    // filesMatching("mcmod.info") { expand(project.properties) }
 }
 
 kotlin {

@@ -20,9 +20,11 @@ package io.github.realyusufismail.eventbus
 
 import io.github.realyusufismail.SuperHeroMod
 import io.github.realyusufismail.SuperHeroMod.Companion.logger
+import io.github.realyusufismail.datagen.DataGenerators
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.data.event.GatherDataEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
@@ -49,5 +51,11 @@ object MainEventBusSubscriber {
     @JvmStatic
     fun commonSetup(event: FMLCommonSetupEvent) {
         logger.info("Hello from SuperHeroMod!")
+    }
+
+    @SubscribeEvent
+    @JvmStatic
+    fun gatherData(event: GatherDataEvent) {
+        DataGenerators.generateData(event)
     }
 }
