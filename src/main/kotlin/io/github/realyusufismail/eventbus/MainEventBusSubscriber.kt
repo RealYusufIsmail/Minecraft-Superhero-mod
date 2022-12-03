@@ -52,10 +52,4 @@ object MainEventBusSubscriber {
     fun commonSetup(event: FMLCommonSetupEvent) {
         logger.info("Hello from SuperHeroMod!")
     }
-
-    @SubscribeEvent
-    @JvmStatic
-    fun gatherData(event: GatherDataEvent) {
-        DataGenerators.generateData(event)
-    }
 }

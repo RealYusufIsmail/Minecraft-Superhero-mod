@@ -28,6 +28,7 @@ import net.minecraftforge.common.data.LanguageProvider
 import net.minecraftforge.registries.RegistryObject
 
 class ModEnLangProvider(gen: DataGenerator) : LanguageProvider(gen, SuperHeroMod.MOD_ID, "en_us") {
+
     override fun addTranslations() {
         item(ItemInit.mjolnir, "Mjolnir")
 

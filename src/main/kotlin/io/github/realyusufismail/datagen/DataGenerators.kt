@@ -18,15 +18,23 @@
  */ 
 package io.github.realyusufismail.datagen
 
+import io.github.realyusufismail.SuperHeroMod
 import io.github.realyusufismail.datagen.lang.ModEnLangProvider
+import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.data.event.GatherDataEvent
+import net.minecraftforge.eventbus.api.SubscribeEvent
+import net.minecraftforge.fml.common.Mod
 
+@Mod.EventBusSubscriber(
+    modid = SuperHeroMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 object DataGenerators {
 
+    @SubscribeEvent
+    @JvmStatic
     fun generateData(event: GatherDataEvent) {
         val gen = event.generator
         val existingFileHelper = event.existingFileHelper
 
-        gen.addProvider(false, ModEnLangProvider(gen))
+        gen.addProvider(true, ModEnLangProvider(gen))
     }
 }

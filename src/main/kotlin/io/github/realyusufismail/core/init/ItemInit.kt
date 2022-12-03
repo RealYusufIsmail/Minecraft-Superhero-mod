@@ -20,15 +20,16 @@ package io.github.realyusufismail.core.init
 
 import io.github.realyusufismail.core.creativetab.CreativeTabs
 import io.github.realyusufismail.eventbus.MainEventBusSubscriber.ITEMS
-import net.minecraft.world.item.Item
+import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.item.SwordItem
 import net.minecraftforge.registries.RegistryObject
 
 object ItemInit {
-    private val properties: Item.Properties = Item.Properties().tab(CreativeTabs.MARVEL.tab)
+    private val properties = Properties().tab(CreativeTabs.MARVEL)
 
     // Marvel
-
     val mjolnir: RegistryObject<SwordItem> =
         ITEMS.register("mjolnir") { SwordItem(ToolMaterialInit.MJOLNIR, 3, -2.4f, properties) }
 }
+
+private fun Properties.tab(tab: CreativeTabs): Properties = tab(tab.tab)

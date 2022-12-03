@@ -23,6 +23,12 @@ group = modGroup
 
 println("Using Java ${JavaVersion.current()}")
 
+sourceSets {
+    main {
+        resources.srcDir("src/generated/resources")
+    }
+}
+
 configure<UserDevExtension> {
     mappings("parchment", "2022.11.27-1.19.2")
 
@@ -103,8 +109,6 @@ configure<UserDevExtension> {
         }
     }
 }
-
-sourceSets.main.get().resources.srcDir("src/generated/resources")
 
 repositories {
     mavenCentral()
