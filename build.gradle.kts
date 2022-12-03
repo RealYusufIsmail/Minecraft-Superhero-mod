@@ -106,8 +106,6 @@ configure<UserDevExtension> {
     }
 }
 
-sourceSets.main.configure { resources.srcDir("src/generated/resources") }
-
 repositories {
     mavenCentral()
     maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")

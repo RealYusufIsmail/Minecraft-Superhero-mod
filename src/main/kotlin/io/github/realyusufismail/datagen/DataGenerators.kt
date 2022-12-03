@@ -18,6 +18,7 @@
  */ 
 package io.github.realyusufismail.datagen
 
+import io.github.realyusufismail.datagen.lang.ModEnLangProvider
 import net.minecraftforge.data.event.GatherDataEvent
 
 object DataGenerators {
@@ -25,5 +26,7 @@ object DataGenerators {
     fun generateData(event: GatherDataEvent) {
         val gen = event.generator
         val existingFileHelper = event.existingFileHelper
+
+        gen.addProvider(false, ModEnLangProvider(gen))
     }
 }
