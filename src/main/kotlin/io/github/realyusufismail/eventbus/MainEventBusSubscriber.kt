@@ -20,9 +20,11 @@ package io.github.realyusufismail.eventbus
 
 import io.github.realyusufismail.SuperHeroMod
 import io.github.realyusufismail.SuperHeroMod.Companion.logger
+import io.github.realyusufismail.datagen.lang.ModEnLangProvider
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraftforge.api.distmarker.Dist
+import net.minecraftforge.data.event.GatherDataEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
@@ -32,22 +34,44 @@ import net.minecraftforge.registries.ForgeRegistries
 
 @Mod.EventBusSubscriber(
     modid = SuperHeroMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
-object MainEventBusSubscriber {
-    val ITEMS: DeferredRegister<Item> =
-        DeferredRegister.create(ForgeRegistries.ITEMS, SuperHeroMod.MOD_ID)
-    val BLOCKS: DeferredRegister<Block> =
-        DeferredRegister.create(ForgeRegistries.BLOCKS, SuperHeroMod.MOD_ID)
+class MainEventBusSubscriber {
 
     init {
         val modEventBus = FMLJavaModLoadingContext.get().modEventBus
 
         ITEMS.register(modEventBus)
         BLOCKS.register(modEventBus)
+
+        modEventBus.addListener(this::attachDataProviders)
     }
 
     @SubscribeEvent
-    @JvmStatic
     fun commonSetup(event: FMLCommonSetupEvent) {
         logger.info("Hello from SuperHeroMod!")
+    }
+
+    /**
+     * An event listener that, when fired, attaches the providers to the data generator to generate
+     * the associated files.
+     *
+     * The 'mod' argument in within 'minecraft.runs.data' in the buildscript must be equal to [ID].
+     *
+     * @param event the [GatherDataEvent] event
+     */
+    private fun attachDataProviders(event: GatherDataEvent) {
+        val gen = event.generator
+        val existingFileHelper = event.existingFileHelper
+
+        if (event.includeClient()) {
+            logger.info("Attaching data providers for client...")
+            gen.addProvider(true, ModEnLangProvider(gen))
+        }
+    }
+
+    companion object {
+        val ITEMS: DeferredRegister<Item> =
+            DeferredRegister.create(ForgeRegistries.ITEMS, SuperHeroMod.MOD_ID)
+        val BLOCKS: DeferredRegister<Block> =
+            DeferredRegister.create(ForgeRegistries.BLOCKS, SuperHeroMod.MOD_ID)
     }
 }

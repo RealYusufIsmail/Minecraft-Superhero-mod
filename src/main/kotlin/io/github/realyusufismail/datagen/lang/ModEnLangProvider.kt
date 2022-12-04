@@ -28,30 +28,20 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import net.minecraftforge.common.data.LanguageProvider
 import net.minecraftforge.registries.RegistryObject
 
+/**
+ * A data provider which generates an 'en_us' localization for the mod.
+ *
+ * @param gen the generator being written to
+ */
 class ModEnLangProvider(gen: DataGenerator) :
-    ModEnLangProviderSupport(gen, SuperHeroMod.MOD_ID, "en_us") {
+    LanguageProvider(gen, SuperHeroMod.MOD_ID, "en_us") {
 
     override fun addTranslations() {
-        item(ItemInit.mjolnir, "Mjolnir")
+        this.addItem(ItemInit.mjolnir, "Mjolnir")
 
-        add(CreativeTabs.MARVEL.displayName.toString(), "Marvel")
-    }
-
-    override fun <T : Item> item(entry: RegistryObject<T>, name: String) {
-        add(entry.get(), name)
-    }
-
-    override fun <T : Block> block(entry: RegistryObject<T>, name: String) {
-        add(entry.get(), name)
-    }
-
-    override fun <T : Entity> entity(key: EntityType<*>, name: String) {
-        add(key.descriptionId, name)
-    }
-
-    override fun add(translatableComponent: Component, lang: String) {
-        super.add(translatableComponent.string, lang)
+        this.add(CreativeTabs.MARVEL.displayName.toString(), "Marvel")
     }
 }

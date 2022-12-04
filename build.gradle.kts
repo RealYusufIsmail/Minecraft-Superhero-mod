@@ -47,8 +47,6 @@ configure<UserDevExtension> {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property("forge.enabledGameTestNamespaces", modId)
-
-            mods { create(modId) { source(sourceSets.main.get()) } }
         }
 
         create("server") {
@@ -59,8 +57,6 @@ configure<UserDevExtension> {
             property("forge.logging.console.level", "debug")
 
             property("forge.enabledGameTestNamespaces", modId)
-
-            mods { create(modId) { source(sourceSets.main.get()) } }
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -75,8 +71,6 @@ configure<UserDevExtension> {
             property("forge.logging.console.level", "debug")
 
             property("forge.enabledGameTestNamespaces", modId)
-
-            mods { create(modId) { source(sourceSets.main.get()) } }
         }
 
         create("data") {
@@ -91,13 +85,15 @@ configure<UserDevExtension> {
                 "--existing",
                 file("src/main/resources/"))
 
-            mods { create(modId) { source(sourceSets.main.get()) } }
+            mods { create(modId) { source(sourceSets["main"]) } }
         }
     }
 }
 
-sourceSets { main { resources.srcDir("src/generated/resources") } }
-
+sourceSets["main"].resources {
+    srcDir("src/generated/resources")
+    exclude(".cache/")
+}
 repositories {
     mavenCentral()
     maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
