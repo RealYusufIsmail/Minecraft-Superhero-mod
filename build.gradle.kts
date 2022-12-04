@@ -24,7 +24,7 @@ group = modGroup
 
 println("Using Java ${JavaVersion.current()}")
 
-configure<UserDevExtension> {
+minecraft {
     mappings("parchment", "2022.11.27-1.19.2")
 
     runs {
@@ -47,6 +47,8 @@ configure<UserDevExtension> {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property("forge.enabledGameTestNamespaces", modId)
+
+            mods { create(modId) { source(sourceSets["main"]) } }
         }
 
         create("server") {
@@ -57,6 +59,8 @@ configure<UserDevExtension> {
             property("forge.logging.console.level", "debug")
 
             property("forge.enabledGameTestNamespaces", modId)
+
+            mods { create(modId) { source(sourceSets["main"]) } }
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -71,6 +75,8 @@ configure<UserDevExtension> {
             property("forge.logging.console.level", "debug")
 
             property("forge.enabledGameTestNamespaces", modId)
+
+            mods { create(modId) { source(sourceSets["main"]) } }
         }
 
         create("data") {
@@ -90,10 +96,8 @@ configure<UserDevExtension> {
     }
 }
 
-sourceSets["main"].resources {
-    srcDir("src/generated/resources")
-    exclude(".cache/")
-}
+sourceSets["main"].resources.srcDir("src/generated/resources")
+
 repositories {
     mavenCentral()
     maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
