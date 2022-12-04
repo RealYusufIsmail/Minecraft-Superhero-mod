@@ -31,5 +31,3 @@ object ItemInit {
     val mjolnir: RegistryObject<SwordItem> =
         ITEMS.register("mjolnir") { SwordItem(ToolMaterialInit.MJOLNIR, 3, -2.4f, properties) }
 }
-
-private fun Properties.tab(tab: CreativeTabs): Properties = tab(tab.tab)

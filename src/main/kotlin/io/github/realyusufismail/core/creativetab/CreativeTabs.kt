@@ -20,18 +20,15 @@ package io.github.realyusufismail.core.creativetab
 
 import io.github.realyusufismail.SuperHeroMod
 import io.github.realyusufismail.core.init.ItemInit
-import kotlin.reflect.KProperty0
 import net.minecraft.world.item.CreativeModeTab
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.SwordItem
-import net.minecraftforge.registries.RegistryObject
-import java.util.function.Supplier
 
-enum class CreativeTabs(val tab: CreativeModeTab) {
-    MARVEL(createTab("marvel", ItemInit::mjolnir));
-}
+class CreativeTabs(index: Int, label: String) : CreativeModeTab(index, label) {
+    override fun makeIcon(): ItemStack {
+        return ItemStack(ItemInit.mjolnir.get())
+    }
 
-private fun createTab(name: String, iconItem: Supplier<out RegistryObject<out Item>>) = object : CreativeModeTab("${SuperHeroMod.MOD_ID}_$name") {
-    override fun makeIcon() = ItemStack(iconItem.get().get())
+    companion object {
+        val MARVEL = CreativeTabs(TABS.size, SuperHeroMod.MOD_ID)
+    }
 }

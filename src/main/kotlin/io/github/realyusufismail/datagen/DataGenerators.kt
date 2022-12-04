@@ -27,10 +27,9 @@ import net.minecraftforge.fml.common.Mod
 
 @Mod.EventBusSubscriber(
     modid = SuperHeroMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
-object DataGenerators {
+class DataGenerators {
 
     @SubscribeEvent
-    @JvmStatic
     fun generateData(event: GatherDataEvent) {
         val gen = event.generator
         val existingFileHelper = event.existingFileHelper

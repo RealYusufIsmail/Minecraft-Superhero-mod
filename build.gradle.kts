@@ -7,6 +7,7 @@ plugins {
     id("com.diffplug.spotless") version "6.11.0"
     id("net.minecraftforge.gradle") version "5.1.+"
     id("org.parchmentmc.librarian.forgegradle") version "1.+"
+    id("eclipse")
     jacoco // code coverage reports
 }
 
@@ -22,12 +23,6 @@ version = modVersion
 group = modGroup
 
 println("Using Java ${JavaVersion.current()}")
-
-sourceSets {
-    main {
-        resources.srcDir("src/generated/resources")
-    }
-}
 
 configure<UserDevExtension> {
     mappings("parchment", "2022.11.27-1.19.2")
@@ -87,15 +82,6 @@ configure<UserDevExtension> {
         create("data") {
             workingDirectory(project.file("run"))
 
-            property("forge.logging.markers", "REGISTRIES")
-
-            property("forge.logging.console.level", "debug")
-
-            // Specify the modid for data generation, where to output the resulting resource, and
-            // where to look for existing resources.
-            // args(""--mod"", modId, ""--all"", ""--output"", file("src/generated/resources/"),
-            // ""--existing"", file("src/main/resources/"))
-
             args(
                 "--mod",
                 modId,
@@ -109,6 +95,8 @@ configure<UserDevExtension> {
         }
     }
 }
+
+sourceSets { main { resources.srcDir("src/generated/resources") } }
 
 repositories {
     mavenCentral()
