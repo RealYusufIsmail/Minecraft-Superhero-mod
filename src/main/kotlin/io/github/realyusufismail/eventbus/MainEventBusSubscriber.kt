@@ -27,26 +27,44 @@ import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.data.event.GatherDataEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
+import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
+import thedarkcolour.kotlinforforge.forge.MOD_BUS
+import thedarkcolour.kotlinforforge.forge.runForDist
 
-@Mod.EventBusSubscriber(
-    modid = SuperHeroMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = [Dist.CLIENT])
 class MainEventBusSubscriber {
 
     init {
-        val modEventBus = FMLJavaModLoadingContext.get().modEventBus
+        val modEventBus = MOD_BUS
 
         ITEMS.register(modEventBus)
         BLOCKS.register(modEventBus)
 
         modEventBus.addListener(this::attachDataProviders)
+        modEventBus.addListener(this::commonSetup)
+
+        val obj = runForDist(
+            clientTarget = {
+                modEventBus.addListener(this::clientSetup)
+            },
+            serverTarget = {
+                modEventBus.addListener(this::serverSetup)
+            }
+        )
     }
 
-    @SubscribeEvent
     fun commonSetup(event: FMLCommonSetupEvent) {
+        logger.info("Hello from SuperHeroMod!")
+    }
+
+    fun clientSetup(event: FMLClientSetupEvent) {
+        logger.info("Hello from SuperHeroMod!")
+    }
+
+    fun serverSetup(event: FMLDedicatedServerSetupEvent) {
         logger.info("Hello from SuperHeroMod!")
     }
 

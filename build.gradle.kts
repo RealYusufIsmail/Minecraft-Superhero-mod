@@ -1,15 +1,19 @@
-import net.minecraftforge.gradle.userdev.UserDevExtension
 import org.gradle.jvm.tasks.Jar
 
 plugins {
     kotlin("jvm") version "1.7.21"
     kotlin("plugin.allopen") version "1.7.21"
+    kotlin("plugin.serialization") version "1.7.21"
     id("com.diffplug.spotless") version "6.11.0"
     id("net.minecraftforge.gradle") version "5.1.+"
     id("org.parchmentmc.librarian.forgegradle") version "1.+"
     id("eclipse")
     jacoco // code coverage reports
 }
+
+apply(
+    from =
+        "https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.7.1.gradle")
 
 val modGroup: String by extra
 val modVersion: String by extra
@@ -92,6 +96,8 @@ minecraft {
                 file("src/main/resources/"))
 
             mods { create(modId) { source(sourceSets["main"]) } }
+
+            logger.lifecycle("Running data generator")
         }
     }
 }

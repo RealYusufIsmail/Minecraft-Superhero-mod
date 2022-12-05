@@ -21,23 +21,15 @@ package io.github.realyusufismail.datagen.lang
 import io.github.realyusufismail.SuperHeroMod
 import io.github.realyusufismail.core.creativetab.CreativeTabs
 import io.github.realyusufismail.core.init.ItemInit
-import io.github.realyusufismail.realyusufismailcore.data.support.lang.ModEnLangProviderSupport
 import net.minecraft.data.DataGenerator
-import net.minecraft.network.chat.Component
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.EntityType
-import net.minecraft.world.item.Item
-import net.minecraft.world.level.block.Block
 import net.minecraftforge.common.data.LanguageProvider
-import net.minecraftforge.registries.RegistryObject
 
 /**
  * A data provider which generates an 'en_us' localization for the mod.
  *
  * @param gen the generator being written to
  */
-class ModEnLangProvider(gen: DataGenerator) :
-    LanguageProvider(gen, SuperHeroMod.MOD_ID, "en_us") {
+class ModEnLangProvider(gen: DataGenerator) : LanguageProvider(gen, SuperHeroMod.MOD_ID, "en_us") {
 
     override fun addTranslations() {
         this.addItem(ItemInit.mjolnir, "Mjolnir")
