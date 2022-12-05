@@ -20,13 +20,8 @@ package io.github.realyusufismail.eventbus
 
 import io.github.realyusufismail.SuperHeroMod
 import io.github.realyusufismail.SuperHeroMod.Companion.logger
-import io.github.realyusufismail.datagen.lang.ModEnLangProvider
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.data.event.GatherDataEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
@@ -43,17 +38,11 @@ class MainEventBusSubscriber {
         ITEMS.register(modEventBus)
         BLOCKS.register(modEventBus)
 
-        modEventBus.addListener(this::attachDataProviders)
         modEventBus.addListener(this::commonSetup)
 
-        val obj = runForDist(
-            clientTarget = {
-                modEventBus.addListener(this::clientSetup)
-            },
-            serverTarget = {
-                modEventBus.addListener(this::serverSetup)
-            }
-        )
+        runForDist(
+            clientTarget = { modEventBus.addListener(this::clientSetup) },
+            serverTarget = { modEventBus.addListener(this::serverSetup) })
     }
 
     fun commonSetup(event: FMLCommonSetupEvent) {
@@ -66,24 +55,6 @@ class MainEventBusSubscriber {
 
     fun serverSetup(event: FMLDedicatedServerSetupEvent) {
         logger.info("Hello from SuperHeroMod!")
-    }
-
-    /**
-     * An event listener that, when fired, attaches the providers to the data generator to generate
-     * the associated files.
-     *
-     * The 'mod' argument in within 'minecraft.runs.data' in the buildscript must be equal to [ID].
-     *
-     * @param event the [GatherDataEvent] event
-     */
-    private fun attachDataProviders(event: GatherDataEvent) {
-        val gen = event.generator
-        val existingFileHelper = event.existingFileHelper
-
-        if (event.includeClient()) {
-            logger.info("Attaching data providers for client...")
-            gen.addProvider(true, ModEnLangProvider(gen))
-        }
     }
 
     companion object {

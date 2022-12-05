@@ -29,7 +29,7 @@ import net.minecraftforge.common.data.LanguageProvider
  *
  * @param gen the generator being written to
  */
-class ModEnLangProvider(gen: DataGenerator) : LanguageProvider(gen, SuperHeroMod.MOD_ID, "en_us") {
+class EnLangProvider(gen: DataGenerator) : LanguageProvider(gen, SuperHeroMod.MOD_ID, "en_us") {
 
     override fun addTranslations() {
         this.addItem(ItemInit.mjolnir, "Mjolnir")

@@ -28,6 +28,24 @@ group = modGroup
 
 println("Using Java ${JavaVersion.current()}")
 
+sourceSets {
+    main.get().resources { srcDir("src/generated/resources") }
+    create("dependencies") {
+        allJava.setSrcDirs(listOf<Any>())
+        resources.setSrcDirs(listOf<Any>())
+    }
+}
+
+configurations {
+    val mod by creating
+    val modRuntime by creating
+    val compileOnly by getting
+    val dependenciesRuntimeOnly by getting
+    modRuntime.extendsFrom(mod)
+    compileOnly.extendsFrom(mod)
+    dependenciesRuntimeOnly.extendsFrom(modRuntime)
+}
+
 minecraft {
     mappings("parchment", "2022.11.27-1.19.2")
 
@@ -52,11 +70,11 @@ minecraft {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property("forge.enabledGameTestNamespaces", modId)
 
-            mods { create(modId) { source(sourceSets["main"]) } }
+            mods { create(modId) { sources(sourceSets.main.get(), sourceSets["dependencies"]) } }
         }
 
         create("server") {
-            workingDirectory(project.file("run"))
+            workingDirectory(project.file("run/client"))
 
             property("forge.logging.markers", "REGISTRIES")
 
@@ -64,7 +82,7 @@ minecraft {
 
             property("forge.enabledGameTestNamespaces", modId)
 
-            mods { create(modId) { source(sourceSets["main"]) } }
+            mods { create(modId) { sources(sourceSets.main.get(), sourceSets["dependencies"]) } }
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -72,7 +90,7 @@ minecraft {
         // The gametest system is also enabled by default for other run configs under the /test
         // command.
         create("gameTestServer") {
-            workingDirectory(project.file("run"))
+            workingDirectory(project.file("run/server"))
 
             property("forge.logging.markers", "REGISTRIES")
 
@@ -80,29 +98,25 @@ minecraft {
 
             property("forge.enabledGameTestNamespaces", modId)
 
-            mods { create(modId) { source(sourceSets["main"]) } }
+            mods { create(modId) { sources(sourceSets.main.get(), sourceSets["dependencies"]) } }
         }
 
         create("data") {
-            workingDirectory(project.file("run"))
+            workingDirectory(project.file("run/data"))
 
             args(
                 "--mod",
-                modId,
+                "superheromod",
                 "--all",
                 "--output",
                 file("src/generated/resources/"),
                 "--existing",
                 file("src/main/resources/"))
 
-            mods { create(modId) { source(sourceSets["main"]) } }
-
-            logger.lifecycle("Running data generator")
+            mods { create(modId) { source(sourceSets.main.get()) } }
         }
     }
 }
-
-sourceSets["main"].resources.srcDir("src/generated/resources")
 
 repositories {
     mavenCentral()
@@ -177,20 +191,6 @@ spotless {
     }
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-tasks.javadoc {
-    if (JavaVersion.current().isJava9Compatible) {
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
-    }
-}
-
 tasks.withType<Jar> {
     archiveFileName.set("SuperHeroMod-${modVersion}-Forge-${forgeVersion}.jar")
     manifest {
@@ -202,9 +202,4 @@ tasks.withType<Jar> {
     // filesMatching("mcmod.info") { expand(project.properties) }
 }
 
-kotlin {
-    target.compilations.configureEach {
-        kotlinOptions.jvmTarget = "17"
-        kotlinOptions.freeCompilerArgs += listOf("-Xno-param-assertions", "-Xno-call-assertions")
-    }
-}
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
