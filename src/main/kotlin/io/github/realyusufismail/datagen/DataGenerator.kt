@@ -20,18 +20,18 @@ package io.github.realyusufismail.datagen
 
 import io.github.realyusufismail.datagen.lang.EnLangProvider
 import net.minecraftforge.data.event.GatherDataEvent
-import thedarkcolour.kotlinforforge.forge.MOD_BUS
+import net.minecraftforge.eventbus.api.IEventBus
 
 object DataGenerator {
-    init {
-        MOD_BUS.addListener(::gatherData)
+    fun init(bus: IEventBus) {
+        bus.addListener(::gatherData)
     }
 
     private fun gatherData(event: GatherDataEvent) {
         val gen = event.generator
         val existingFileHelper = event.existingFileHelper
 
-        if (event.includeServer()) {
+        if (event.includeServer() || event.includeClient()) {
             gen.addProvider(true, EnLangProvider(gen))
         }
     }

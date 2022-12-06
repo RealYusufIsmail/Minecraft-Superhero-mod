@@ -20,21 +20,25 @@ package io.github.realyusufismail.eventbus
 
 import io.github.realyusufismail.SuperHeroMod
 import io.github.realyusufismail.SuperHeroMod.Companion.logger
+import io.github.realyusufismail.datagen.DataGenerator
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
-import thedarkcolour.kotlinforforge.forge.MOD_BUS
 import thedarkcolour.kotlinforforge.forge.runForDist
 
-class MainEventBusSubscriber {
+object MainEventBusSubscriber {
 
-    init {
-        val modEventBus = MOD_BUS
+    val ITEMS: DeferredRegister<Item> =
+        DeferredRegister.create(ForgeRegistries.ITEMS, SuperHeroMod.MOD_ID)
+    val BLOCKS: DeferredRegister<Block> =
+        DeferredRegister.create(ForgeRegistries.BLOCKS, SuperHeroMod.MOD_ID)
 
+    fun init(modEventBus: IEventBus) {
         ITEMS.register(modEventBus)
         BLOCKS.register(modEventBus)
 
@@ -43,6 +47,8 @@ class MainEventBusSubscriber {
         runForDist(
             clientTarget = { modEventBus.addListener(this::clientSetup) },
             serverTarget = { modEventBus.addListener(this::serverSetup) })
+
+        modEventBus.register(DataGenerator::init)
     }
 
     fun commonSetup(event: FMLCommonSetupEvent) {
@@ -55,12 +61,5 @@ class MainEventBusSubscriber {
 
     fun serverSetup(event: FMLDedicatedServerSetupEvent) {
         logger.info("Hello from SuperHeroMod!")
-    }
-
-    companion object {
-        val ITEMS: DeferredRegister<Item> =
-            DeferredRegister.create(ForgeRegistries.ITEMS, SuperHeroMod.MOD_ID)
-        val BLOCKS: DeferredRegister<Block> =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, SuperHeroMod.MOD_ID)
     }
 }

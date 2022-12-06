@@ -20,19 +20,26 @@ package io.github.realyusufismail
 
 import com.mojang.logging.LogUtils
 import io.github.realyusufismail.config.SuperHeroConfig
+import io.github.realyusufismail.eventbus.MainEventBusSubscriber
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import org.slf4j.Logger
 import software.bernie.geckolib3.GeckoLib
+import thedarkcolour.kotlinforforge.KotlinModLoadingContext
+
+val MOD_BUS: IEventBus
+    inline get() = KotlinModLoadingContext.get().getKEventBus()
 
 @Mod(SuperHeroMod.MOD_ID)
 class SuperHeroMod {
 
     init {
         GeckoLib.initialize()
-        MinecraftForge.EVENT_BUS.register(this)
         SuperHeroConfig.registerConfigs(ModLoadingContext.get().activeContainer)
+        MainEventBusSubscriber.init(MOD_BUS)
+        MinecraftForge.EVENT_BUS.register(this)
     }
 
     companion object {

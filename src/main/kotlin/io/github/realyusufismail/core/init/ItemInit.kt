@@ -19,7 +19,7 @@
 package io.github.realyusufismail.core.init
 
 import io.github.realyusufismail.core.creativetab.CreativeTabs
-import io.github.realyusufismail.eventbus.MainEventBusSubscriber.Companion.ITEMS
+import io.github.realyusufismail.eventbus.MainEventBusSubscriber.ITEMS
 import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.item.SwordItem
 import net.minecraftforge.registries.RegistryObject
